@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dida.reggie.mapper.AddressBookMapper">
+    <resultMap id="addressBookMapper" type="com.dida.reggie.entity.AddressBook">
+        <result column="user_id" property="userId"></result>
+        <result column="province_code" property="provinceCode"></result>
+        <result column="province_name" property="provinceName"></result>
+        <result column="city_code" property="cityCode"></result>
+        <result column="city_name" property="cityName"></result>
+        <result column="district_code" property="districtCode"></result>
+        <result column="district_name" property="districtName"></result>
+        <result column="is_default" property="isDefault"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="update_user" property="updateUser"></result>
+    </resultMap>
+
+    <!--新增地址-->
+    <insert id="save">
+        insert into address_book (id, user_id, consignee, sex, phone, province_code, province_name, city_code,
+        city_name, district_code, district_name, detail, label, create_time, update_time, create_user, update_user)
+        values (null, #{userId}, #{consignee}, #{sex}, #{phone}, #{provinceCode}, #{provinceName}, #{cityCode},
+                #{cityName}, #{districtCode}, #{districtName}, #{detail}, #{label}, #{createTime},
+                #{updateTime}, #{createUser}, #{updateUser});
+    </insert>
+    <update id="updateDefaultByUserId">
+        update address_book
+        set is_default = 0
+        where user_id = #{userId};
+    </update>
+
+    <update id="updateDefaultById">
+        update address_book
+        set is_default = 1
+        where id = #{id};
+    </update>
+
+    <!--修改地址信息-->
+    <update id="updateById">
+        update address_book
+        <set>
+            <if test="consignee != null and consignee != '' ">
+                consignee = #{consignee},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone},
+            </if>
+            <if test="provinceCode != null and provinceCode != '' ">
+                province_code = #{provinceCode},
+            </if>
+            <if test="provinceName != null and provinceName != '' ">
+                province_name = #{provinceName},
+            </if>
+            <if test="cityCode != null and cityCode != '' ">
+                city_code = #{cityCode},
+            </if>
+            <if test="cityName != null and cityName != '' ">
+                city_name = #{cityName},
+            </if>
+            <if test="districtCode != null and districtCode != '' ">
+                district_code = #{districtCode},
+            </if>
+            <if test="districtName != null and districtName != '' ">
+                district_name = #{districtName},
+            </if>
+            <if test="detail != null and detail != '' ">
+                detail = #{detail},
+            </if>
+            <if test="label != label and label != '' ">
+                label = #{label},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <select id="getByUserId" resultMap="addressBookMapper">
+        select *
+        from address_book
+        where user_id = #{userId}
+        order by update_time desc;
+    </select>
+
+    <select id="getById" resultMap="addressBookMapper">
+        select *
+        from address_book
+        where id = #{id}
+    </select>
+
+    <select id="getDefault" resultMap="addressBookMapper">
+        select *
+        from address_book
+        where user_id = #{userId}
+        and is_default = 1;
+    </select>
+</mapper>

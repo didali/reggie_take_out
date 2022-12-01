@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dida.reggie.mapper.CategoryMapper">
+    <resultMap id="categoryMapper" type="category">
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="update_user" property="updateUser"></result>
+    </resultMap>
+    <!--新增分类-->
+    <insert id="save">
+        insert into category
+        values (null, #{type}, #{name}, #{sort},
+                #{createTime}, #{updateTime}, #{createUser}, #{updateUser});
+    </insert>
+
+    <!--修改分类-->
+    <update id="update">
+        update category
+        <set>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <!--根据id删除-->
+    <delete id="deleteById">
+        delete from category
+        where id = #{id};
+    </delete>
+
+    <!--分页查询-->
+    <select id="selectByPage" resultMap="categoryMapper">
+        select *
+        from category
+        order by sort
+        limit #{page}, #{pageSize};
+    </select>
+
+    <!--查询总记录数-->
+    <select id="getCounts" resultType="java.lang.Integer">
+        select count(*)
+        from category;
+    </select>
+
+    <!--根据条件查询分类数据-->
+    <select id="getList" resultMap="categoryMapper">
+        select *
+        from category
+        <where>
+            <if test="type != null">
+                type = #{type}
+            </if>
+        </where>
+        order by sort asc, update_time desc;
+    </select>
+
+    <!--根据id查询分类对象-->
+    <select id="selectById" resultMap="categoryMapper">
+        select *
+        from category
+        where id = #{id};
+    </select>
+
+
+</mapper>

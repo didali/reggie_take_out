@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dida.reggie.mapper.DishMapper">
+    <resultMap id="dishMapper" type="dish">
+        <result column="category_id" property="categoryId"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="update_user" property="updateUser"></result>
+    </resultMap>
+    <insert id="save">
+        insert into dish(id, name, category_id, price, code, image, description, status, create_time, update_time, create_user, update_user)
+        values (null, #{name}, #{categoryId}, #{price}, #{code}, #{image}, #{description},
+                #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser});
+    </insert>
+
+    <!--根据id修改-->
+    <update id="updateById">
+        update dish
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <!--根据category_id查询是否有菜品-->
+    <select id="selectByCategoryId" resultMap="dishMapper">
+        select *
+        from dish
+        <where>
+            <if test="status != null">
+                status = #{status}
+            </if>
+            and category_id = #{categoryId};
+        </where>
+
+    </select>
+
+    <!--根据名称查询ID-->
+    <select id="selectIdByName" resultType="java.lang.Long">
+        select id
+        from dish
+        where name = #{name};
+    </select>
+
+    <!--分页查询-->
+    <select id="selectByPage" resultMap="dishMapper">
+        select *
+        from dish
+        order by id
+        limit #{pageNo}, #{pageSize};
+    </select>
+
+    <!--分页条件查询-->
+    <select id="selectByPageAndCondition" resultMap="dishMapper">
+        select *
+        from dish
+        where name like #{name}
+        order by id
+        limit #{pageNo}, #{pageSize};
+    </select>
+
+    <!--获取总记录数-->
+    <select id="selectCounts" resultType="java.lang.Integer">
+        select count(*)
+        from dish
+        where name like #{name};
+    </select>
+
+    <!--根据id查询信息-->
+    <select id="selectById" resultMap="dishMapper">
+        select *
+        from dish
+        where id = #{id};
+    </select>
+
+</mapper>

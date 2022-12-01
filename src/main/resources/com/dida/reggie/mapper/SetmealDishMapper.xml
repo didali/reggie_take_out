@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dida.reggie.mapper.SetmealDishMapper">
+    <resultMap id="setmealDishMapper" type="setmealDish">
+        <result column="setmeal_id" property="setmealId"></result>
+        <result column="dish_id" property="dishId"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="update_user" property="updateUser"></result>
+    </resultMap>
+
+    <!--添加套餐-->
+    <insert id="save">
+        insert into setmeal_dish (id, setmeal_id, dish_id, name, price, copies, create_time, update_time, create_user, update_user)
+        values (null, #{setmealId}, #{dishId}, #{name}, #{price}, #{copies}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser});
+    </insert>
+    <delete id="deleteBySetmealIds">
+        delete from setmeal_dish
+        where setmeal_id = #{setmealIds};
+    </delete>
+
+    <!--根据套餐id获取套餐对应菜品信息-->
+    <select id="getBySetmealId" resultMap="setmealDishMapper">
+        select *
+        from setmeal_dish
+        where setmeal_id = #{setmealId};
+    </select>
+</mapper>

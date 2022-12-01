@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dida.reggie.mapper.ShoppingCartMapper">
+    <resultMap id="shoppingCartMapper" type="com.dida.reggie.entity.ShoppingCart">
+        <result column="user_id" property="userId"></result>
+        <result column="dish_id" property="dishId"></result>
+        <result column="setmeal_id" property="setmealId"></result>
+        <result column="dish_flavor" property="dishFlavor"></result>
+        <result column="create_time" property="createTime"></result>
+    </resultMap>
+
+    <!--添加进购物车-->
+    <insert id="add">
+        insert into shopping_cart (id, name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
+        values (null, #{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{createTime});
+    </insert>
+
+    <!--商品数量加1-->
+    <update id="updateNumber">
+        update shopping_cart
+        set number = (number + 1)
+        where name = #{name}
+        and user_id = #{userId};
+    </update>
+
+    <!--查询购物车中是否存在某个商品-->
+    <select id="getShopping" resultMap="shoppingCartMapper">
+        select *
+        from shopping_cart
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dida.reggie.mapper.EmployeeMapper">
+
+    <resultMap id="employeeMapper" type="employee">
+        <result column="id_number" property="idNumber"></result>
+        <result column="create_time" property="createTime"></result>
+        <result column="update_time" property="updateTime"></result>
+        <result column="create_user" property="createUser"></result>
+        <result column="update_user" property="updateUser"></result>
+    </resultMap>
+    <insert id="save">
+        insert into employee
+        values (null, #{name}, #{username}, #{password}, #{phone}, #{sex}, #{idNumber},
+                #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser});
+    </insert>
+
+    <!--根据id修改-->
+    <update id="updateById">
+        update employee
+        <set>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="username != null and username != '' ">
+                username = #{username},
+            </if>
+            <if test="password != null and password != '' ">
+                password = #{password},
+            </if>
+            <if test="phone != null and phone != '' ">
+                phone = #{phone},
+            </if>
+            <if test="sex != null and sex != '' ">
+                sex = #{sex},
+            </if>
+            <if test="idNumber != null and idNumber != '' ">
+                id_number = #{idNumber},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser}
+            </if>
+        </set>
+        where id = #{id};
+    </update>
+
+    <select id="selectEmployee" resultMap="employeeMapper">
+        select *
+        from employee
+        where username = #{username}
+          and password = #{password};
+    </select>
+
+    <!--根据用户名查询-->
+    <select id="selectByUsername" resultMap="employeeMapper">
+        select *
+        from employee
+        where username = #{username};
+    </select>
+
+    <!--查询总记录数-->
+    <select id="selectCounts" resultType="java.lang.Integer">
+        select count(*)
+        from employee
+        where name like #{name};
+    </select>
+
+    <!--分页查询-->
+    <select id="selectByPage" resultMap="employeeMapper">
+        select *
+        from employee limit #{pageNo}, #{pageSize};
+    </select>
+
+    <!--分页条件查询-->
+    <select id="selectByPageAndCondition" resultMap="employeeMapper">
+        select *
+        from employee
+        where name like #{name} limit #{pageNo}
+            , #{pageSize};
+    </select>
+
+    <!--根据id查询-->
+    <select id="selectById" resultMap="employeeMapper">
+        select *
+        from employee
+        where id = #{id};
+    </select>
+
+
+</mapper>
