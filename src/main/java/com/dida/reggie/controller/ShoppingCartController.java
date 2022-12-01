@@ -20,7 +20,7 @@ public class ShoppingCartController {
     private ShoppingCartService shoppingCartService;
 
     /**
-     * 添加商品至购物车
+     * 添加商品
      *
      * @param shoppingCart
      * @return
