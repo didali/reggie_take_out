@@ -185,7 +185,6 @@ public class DishController {
             //添加进集合
             dishDtoList.add(dishDto);
         }
-
         redisTemplate.opsForValue().set(key, dishDtoList, 60, TimeUnit.MINUTES);
         return Result.success(dishDtoList);
     }
