@@ -9,6 +9,12 @@ spring:
       url: jdbc:mysql://localhost:3306/reggie?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 562552
+  #配置redis
+  redis:
+    host: 192.168.1.203
+    port: 6379
+    password: YinHang1024..
+    database: 2
 
 mybatis:
   #设置type搜索包的路径
@@ -16,6 +22,7 @@ mybatis:
   #配置mapper的扫描
   mapper-locations: classpath:com/dida/reggie/mapper/*.xml
 
+#配置照片缓存地址
 reggie:
   path: D:\\DidaProject/reggieCache/
 
