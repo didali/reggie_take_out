@@ -16,6 +16,10 @@ spring:
     password: YinHang1024..
     database: 2
 
+  cache:
+    redis:
+      time-to-live: 1800000 #设置缓存数据过期时间
+
 mybatis:
   #设置type搜索包的路径
   type-aliases-package: com.dida.reggie.entity

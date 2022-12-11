@@ -11,6 +11,8 @@ import com.dida.reggie.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping
+    @CacheEvict(value = "setmealCache", allEntries = true) //allEntries = true表示我们要清理setmealCache下面所有的缓存
     public Result<String> saveSetmeal(@RequestBody SetmealDto setmealDto) {
         log.info("{}", setmealDto);
         setmealService.saveWithDish(setmealDto);
@@ -99,6 +102,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache", allEntries = true) //allEntries = true表示我们要清理setmealCache下面所有的缓存
     public Result<String> delete(@RequestParam List<Long> ids) {
         setmealService.deleteByIds(ids);
         return Result.success("删除成功");
@@ -106,6 +110,7 @@ public class SetmealController {
 
     //查询在售套餐
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache", key = "#setmeal.categoryId + '_' +#setmeal.status")
     public Result<List> list(Setmeal setmeal) {
         log.info(setmeal.toString());
         List<Setmeal> setmealsByStatus = setmealService.getSetmealsByStatus(setmeal);
