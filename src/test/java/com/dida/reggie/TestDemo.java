@@ -26,10 +26,5 @@ public class TestDemo {
         System.out.println(employee);
     }
 
-    @Test
-    public void test3() {
-        Long a = 1397844263642378242L;
-        Integer count = dishService.selectByCategoryId(a);
-        System.out.println(count);
-    }
+
 }
